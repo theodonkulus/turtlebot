@@ -17,13 +17,15 @@ void Configure_TPM0(uint16 period)
 { // All servos set to 
     // Enable the Clock gate to the MODULE!!
     SIM_SCGC6 |= SIM_SCGC6_TPM0_MASK;
-    SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTC_MASK;
+    SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTA_MASK;
     
     // Ensure that the module is disabled first
     TPM0_SC = 0x00;
            
     //  PIN CONFIGURATION
     // Configure PTD2 and 3 for TPM functionality
+	  PORTA_PCR4 = PORT_PCR_MUX(4); //A4
+	  PORTA_PCR5 = PORT_PCR_MUX(4); //A5
     PORTD_PCR2 = PORT_PCR_MUX(4); // D2
     PORTD_PCR3 = PORT_PCR_MUX(4); // D3
 	  PORTD_PCR4 = PORT_PCR_MUX(4); // D4
@@ -44,18 +46,24 @@ void Configure_TPM0(uint16 period)
     
     //CHANNEL CONFIGURATIONS   
     // Configure module registers
+		TPM0_C0SC = TPM_CnSC_CHF_MASK;
+    TPM0_C1SC = TPM_CnSC_CHF_MASK;
     TPM0_C2SC = TPM_CnSC_CHF_MASK;
     TPM0_C3SC = TPM_CnSC_CHF_MASK;
     TPM0_C4SC = TPM_CnSC_CHF_MASK;
 		TPM0_C5SC = TPM_CnSC_CHF_MASK;
 
     // Setup TPM0 Channels for Edge aligned PWM
+		TPM0_C0SC = (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK);
+		TPM0_C1SC = (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK);
     TPM0_C2SC = (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK);
 		TPM0_C3SC = (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK);
     TPM0_C4SC = (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK);
 		TPM0_C5SC = (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK);
 
     // Initialize Channel value registers
+		TPM0_C0V = INIT_VAL;
+    TPM0_C1V = INIT_VAL;
     TPM0_C2V = INIT_VAL;
     TPM0_C3V = INIT_VAL;
     TPM0_C4V = INIT_VAL;

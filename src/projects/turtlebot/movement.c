@@ -9,7 +9,7 @@
 #include "timer.h"
 
 volatile uint32_t * servo_regmap[NUM_OF_SERVOS] = 
-{&TPM0_C3V, &TPM0_C2V, &TPM0_C4V, &TPM0_C5V, &TPM0_C5V, &TPM0_C5V, &TPM0_C5V, &TPM0_C5V};
+{&TPM0_C3V, &TPM0_C2V, &TPM0_C4V, &TPM0_C5V, &TPM0_C0V, &TPM0_C1V, &TPM0_C5V, &TPM0_C5V};
 
 //pwm structure that holds data about servos and stuff
 pwm_channel_t channels[NUM_OF_SERVOS];
