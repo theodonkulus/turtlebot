@@ -118,5 +118,6 @@ void ch_move(pwm_channel_t * channel, uint16 target_angle)
 
    channel->current_angle = angle_set;
 	 *(channel->target_reg) = ticks_to_motors;
+   channel->servo_ticks = ticks_to_motors;
 }
 
