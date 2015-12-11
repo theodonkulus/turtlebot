@@ -23,7 +23,7 @@ int main (void)
     start();
 #endif
   setup_life_timer();      
-	printf("\n\r\n\r*** Ziggy v0.1 ***\n\r");
+	printf("\n\r\n\r*** Turtlebot v0.5 ***\n\r");
 	init_movement();
 	ch = 0x30;
 	while(1)
