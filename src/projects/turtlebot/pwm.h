@@ -31,14 +31,12 @@ typedef struct pwm_channel_s
 } pwm_channel_t;
 
 uint16 pulse_width_in_ticks(uint16 period, uint16 duty_cycle);
+void Configure_clock(void);
 void Configure_TPM0(const uint16 period);
+void Configure_TPM1(const uint16 period);
 
 uint16 degrees_to_ticks(uint16 degrees);
 uint16 ticks_to_degrees(uint16 servo_ticks);
 void ch_move(pwm_channel_t * channel, uint16 target_angle);
-//channel 0 TPM0_C3V
-//channel 1 TPM0_C2V 
-//channel 2 TPM0_C4V 
-//channel 3 TPM0_C5V 
 
 #endif

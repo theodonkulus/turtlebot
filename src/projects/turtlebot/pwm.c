@@ -13,25 +13,8 @@ uint16 pulse_width_in_ticks(uint16 period, uint16 duty_cycle)
 		return (period * duty_cycle) / 100;
 }
 
-void Configure_TPM0(uint16 period)
-{ // All servos set to 
-    // Enable the Clock gate to the MODULE!!
-    SIM_SCGC6 |= SIM_SCGC6_TPM0_MASK;
-    SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTA_MASK;
-    
-    // Ensure that the module is disabled first
-    TPM0_SC = 0x00;
-           
-    //  PIN CONFIGURATION
-    // Configure PTD2 and 3 for TPM functionality
-	  PORTA_PCR4 = PORT_PCR_MUX(4); //A4
-	  PORTA_PCR5 = PORT_PCR_MUX(4); //A5
-    PORTD_PCR2 = PORT_PCR_MUX(4); // D2
-    PORTD_PCR3 = PORT_PCR_MUX(4); // D3
-	  PORTD_PCR4 = PORT_PCR_MUX(4); // D4
-    PORTC_PCR9 = PORT_PCR_MUX(3); //C9
-	
-    // CLOCK CONFIGURATION
+void Configure_clock(void)
+{
     // Enable the IRCLK
     MCG_C1 |= MCG_C1_IRCLKEN_MASK;
     // Set the IRCLK to fast clock
@@ -40,10 +23,32 @@ void Configure_TPM0(uint16 period)
     // Set the TPM clock source to the IRCLK
     SIM_SOPT2 &= ~SIM_SOPT2_TPMSRC_MASK;
     SIM_SOPT2 |= SIM_SOPT2_TPMSRC(3);
+}
+
+void Configure_TPM0(uint16 period)
+{ // All servos set to 
+    // Enable the Clock gate to the MODULE!!
+    SIM_SCGC6 |= SIM_SCGC6_TPM0_MASK;
+    SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTC_MASK;
+	
     
+    // Ensure that the module is disabled first
+    TPM0_SC = 0x00;
+           
+    //  PIN CONFIGURATION
+    // Configure PTD2 and 3 for TPM functionality
+	  PORTC_PCR1 = PORT_PCR_MUX(4); //C1
+	  PORTC_PCR2 = PORT_PCR_MUX(4); //C2
+    PORTD_PCR2 = PORT_PCR_MUX(4); // D2
+    PORTD_PCR3 = PORT_PCR_MUX(4); // D3
+	  PORTD_PCR4 = PORT_PCR_MUX(4); // D4
+    PORTC_PCR9 = PORT_PCR_MUX(3); //C9
+	
+	  Configure_clock();
     // Select a Prescale value of 2 to get a 1us resolution
     TPM0_SC |= TPM_SC_PS(1);
     
+	  
     //CHANNEL CONFIGURATIONS   
     // Configure module registers
 		TPM0_C0SC = TPM_CnSC_CHF_MASK;
@@ -69,15 +74,50 @@ void Configure_TPM0(uint16 period)
     TPM0_C4V = INIT_VAL;
 		TPM0_C5V = INIT_VAL;
 		
-    // Configure the MOD register
+     // Configure the MOD register
     TPM0_MOD = period;
     TPM0_CNT = 0;
     
-    // Enable TPM0 IRQ (IRQ #17)
-    //enable_irq(17);
-    
     // Finally Enable the TPM module
     TPM0_SC |= TPM_SC_CMOD(1);
+}
+
+void Configure_TPM1(uint16 period)
+{ // All servos set to 
+    // Enable the Clock gate to the MODULE!!
+    SIM_SCGC6 |= SIM_SCGC6_TPM1_MASK;
+    SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
+    
+    // Ensure that the module is disabled first
+    TPM1_SC = 0x00;
+     	    
+    //  PIN CONFIGURATION
+    // Configure A3 and A4 for TPM functionality
+	  PORTA_PCR12 = PORT_PCR_MUX(3); //A1
+	  PORTA_PCR13 = PORT_PCR_MUX(3); //A2
+	     
+    // Select a Prescale value of 2 to get a 1us resolution
+    TPM1_SC |= TPM_SC_PS(1);
+    
+    //CHANNEL CONFIGURATIONS   
+    // Configure module registers
+		TPM1_C0SC = TPM_CnSC_CHF_MASK;
+    TPM1_C1SC = TPM_CnSC_CHF_MASK;
+
+    // Setup TPM1 Channels for Edge aligned PWM
+		TPM1_C0SC = (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK);
+		TPM1_C1SC = (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK);
+
+    // Initialize Channel value registers
+		TPM1_C0V = INIT_VAL;
+    TPM1_C1V = INIT_VAL;
+		
+    // Configure the MOD register
+    TPM1_MOD = period;
+    TPM1_CNT = 0;
+    
+    // Finally Enable the TPM module
+    TPM1_SC |= TPM_SC_CMOD(1);
 }
 
 uint16 degrees_to_ticks(uint16 degrees)
