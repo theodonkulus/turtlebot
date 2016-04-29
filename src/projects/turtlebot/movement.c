@@ -11,6 +11,8 @@
 volatile uint32_t * servo_regmap[NUM_OF_SERVOS] = 
 {&TPM0_C3V, &TPM0_C2V, &TPM0_C4V, &TPM0_C5V, &TPM0_C0V, &TPM0_C1V, &TPM1_C0V, &TPM1_C1V};
 
+const uint16 neutral_pos[NUM_OF_SERVOS] = {90, 15, 90, 180, 90, 15, 90, 180};
+
 //pwm structure that holds data about servos and stuff
 pwm_channel_t channels[NUM_OF_SERVOS];
 
@@ -30,7 +32,7 @@ void init_movement(void)
    {
        channels[i].channel_num = i;
        channels[i].max_angle = 180;
-       channels[i].min_angle = 0;
+       channels[i].min_angle = 15;
        channels[i].target_reg = servo_regmap[i];
 		   //ch_move(&channels[i], 0);
    }
@@ -83,6 +85,18 @@ uint16 back_left_knee_angle = 0;
 uint16 back_right_hip_angle = 0;
 uint16 back_right_knee_angle = 0;
 
+
+void default_state(void)
+{
+	ch_move(&channels[FRONT_LEFT_HIP], neutral_pos[FRONT_LEFT_HIP]);
+	ch_move(&channels[FRONT_LEFT_KNEE], neutral_pos[FRONT_LEFT_KNEE]);
+	ch_move(&channels[FRONT_RIGHT_HIP], neutral_pos[FRONT_RIGHT_HIP]);
+	ch_move(&channels[FRONT_RIGHT_KNEE], neutral_pos[FRONT_RIGHT_KNEE]);
+	ch_move(&channels[BACK_LEFT_HIP], neutral_pos[BACK_LEFT_HIP]);
+	ch_move(&channels[BACK_LEFT_KNEE], neutral_pos[BACK_LEFT_KNEE]);
+	ch_move(&channels[BACK_RIGHT_HIP], neutral_pos[BACK_RIGHT_HIP]);
+	ch_move(&channels[BACK_RIGHT_KNEE], neutral_pos[BACK_RIGHT_KNEE]);
+}
 
 void test_action(const char ch)
 {
@@ -228,6 +242,18 @@ void test_action(const char ch)
            channels[BACK_RIGHT_KNEE].servo_ticks, 
            channels[BACK_RIGHT_KNEE].current_angle);
 				break;
+		 case 0x78: //Move all knees up
+				front_right_knee_angle += 5;
+		    back_right_knee_angle  += 5;
+		    front_left_knee_angle  -= 5;
+		    back_left_knee_angle   -= 5;
+		    break;	 
+		 case 0x7A: // Move all knees down
+			  front_right_knee_angle -= 5;
+		    back_right_knee_angle -= 5;
+		    front_left_knee_angle += 5;
+		    back_left_knee_angle += 5;
+		    break;
 		 default:
 				break;
 	 }

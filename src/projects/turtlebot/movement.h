@@ -36,6 +36,7 @@ typedef enum direction_state_e {
 
 //init and test
 void init_movement(void);
+void default_state(void);
 void test_action(const char ch);
 
 #endif

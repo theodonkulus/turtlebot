@@ -26,6 +26,7 @@ int main (void)
 	printf("\n\r\n\r*** Turtlebot v0.5 ***\n\r");
 	init_movement();
 	ch = 0x30;
+	default_state();
 	while(1)
 	{
 	  current_time = get_time();
