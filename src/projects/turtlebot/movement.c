@@ -76,14 +76,6 @@ void init_movement(void)
 //{
 
 //}
-uint16 front_left_hip_angle = 0;
-uint16 front_left_knee_angle = 0;
-uint16 front_right_hip_angle = 0;
-uint16 front_right_knee_angle = 0;
-uint16 back_left_hip_angle = 0;
-uint16 back_left_knee_angle = 0;
-uint16 back_right_hip_angle = 0;
-uint16 back_right_knee_angle = 0;
 
 
 void default_state(void)
@@ -100,6 +92,14 @@ void default_state(void)
 
 void test_action(const char ch)
 {
+	 static uint16 front_left_hip_angle = 90;
+   static uint16 front_left_knee_angle = 15;
+   static uint16 front_right_hip_angle = 90;
+   static uint16 front_right_knee_angle = 180;
+   static uint16 back_left_hip_angle = 90;
+   static uint16 back_left_knee_angle = 15;
+   static uint16 back_right_hip_angle = 90;
+   static uint16 back_right_knee_angle = 180;
    //walkState(move_state);
 	 switch(ch)
 	 {
