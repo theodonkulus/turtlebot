@@ -143,19 +143,19 @@ uint16 ticks_to_degrees(uint16 servo_ticks)
 
 //Move servo to desired angle within given bounds. Bounds checking
 //is included should we go over the given bounds.
-void ch_move(pwm_channel_t * channel, uint16 target_angle)
+uint16 ch_move(pwm_channel_t * channel, uint16 target_angle)
 {
 	 uint16 ticks_to_motors = 0;
 	 uint16 angle_set = 0;
 
-	 if(target_angle > channel->max_angle)
+	 if(target_angle >= channel->max_angle)
 	 {
-	    ticks_to_motors = SERVO_MAX;
+	    ticks_to_motors = degrees_to_ticks(channel->max_angle);
       angle_set = channel->max_angle;
 	 } 
-   else if (target_angle < channel->min_angle) 
+   else if (target_angle <= channel->min_angle) 
    {
-	    ticks_to_motors = SERVO_MIN;
+	    ticks_to_motors = degrees_to_ticks(channel->min_angle);
       angle_set = channel->min_angle;
    } 
    else 
@@ -167,5 +167,6 @@ void ch_move(pwm_channel_t * channel, uint16 target_angle)
    channel->current_angle = angle_set;
 	 *(channel->target_reg) = ticks_to_motors;
    channel->servo_ticks = ticks_to_motors;
+	 return channel->current_angle;
 }
 

@@ -37,6 +37,6 @@ void Configure_TPM1(const uint16 period);
 
 uint16 degrees_to_ticks(uint16 degrees);
 uint16 ticks_to_degrees(uint16 servo_ticks);
-void ch_move(pwm_channel_t * channel, uint16 target_angle);
+uint16 ch_move(pwm_channel_t * channel, uint16 target_angle);
 
 #endif
