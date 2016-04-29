@@ -92,9 +92,9 @@ void Configure_TPM1(uint16 period)
     TPM1_SC = 0x00;
      	    
     //  PIN CONFIGURATION
-    // Configure A3 and A4 for TPM functionality
-	  PORTA_PCR12 = PORT_PCR_MUX(3); //A1
-	  PORTA_PCR13 = PORT_PCR_MUX(3); //A2
+    // Configure A12 and A13 for TPM functionality
+	  PORTA_PCR12 = PORT_PCR_MUX(3); //A12
+	  PORTA_PCR13 = PORT_PCR_MUX(3); //A13
 	     
     // Select a Prescale value of 2 to get a 1us resolution
     TPM1_SC |= TPM_SC_PS(1);
